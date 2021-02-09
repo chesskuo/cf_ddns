@@ -3,10 +3,8 @@ import argparse
 
 endpoints = 'https://api.cloudflare.com/client/v4/'
 ip_url = {
-	'v4_ori': 'http://ip1.dynupdate.no-ip.com/',
-	'v4_bak': 'http://ip1.dynupdate.no-ip.com:8245/',
-	'v6_ori': 'http://ip1.dynupdate6.no-ip.com/',
-	'v6_bak': 'http://ip1.dynupdate6.no-ip.com:8245/'
+	'v4': 'http://ip4only.me/api/',
+	'v6': 'http://ip6only.me/api/',
 }
 
 def getZoneID(dn):
@@ -28,10 +26,11 @@ def getDomainID(dn, zID, type='A'):
 
 def get_ip_addr(v):
 	try:
-		r = requests.get(ip_url[v + '_ori'])
+		r = requests.get(ip_url[v])
 	except:
-		r = requests.get(ip_url[v + '_bak'])
-	return r.text
+		exit()
+	ip = r.text.split(',')[1]
+	return ip
 
 def update_dns(domain, ip_addr_4, ip_addr_6):
 	zID = getZoneID(domain)
